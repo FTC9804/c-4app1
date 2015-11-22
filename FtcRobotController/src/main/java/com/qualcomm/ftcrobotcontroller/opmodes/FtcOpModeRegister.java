@@ -65,6 +65,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register ("C4TankDrive", C4TankDrive.class);
     manager.register("C4DisplayBot", C4DisplayBot.class);
     manager.register("GyroData", GyroData.class);
+    manager.register("CircleGyro", CircleGyro.class);
 
 
 
