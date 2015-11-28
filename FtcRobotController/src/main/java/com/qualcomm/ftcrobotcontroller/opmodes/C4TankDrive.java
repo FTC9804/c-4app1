@@ -1,6 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.ftcrobotcontroller.opmodes.CircleGyro;
 
 /**
  * Created by etiennelunetta on 11/14/15.
@@ -23,12 +24,11 @@ public class C4TankDrive extends OpMode {
     @Override
     public void loop(){
 
-        double left = -gamepad1.right_stick_y;
-        double right = -gamepad1.left_stick_y;
-
-        motorLeft.setPower(left);
-        motorRight.setPower(right);
 
 
     }
+
+
+
+
 }

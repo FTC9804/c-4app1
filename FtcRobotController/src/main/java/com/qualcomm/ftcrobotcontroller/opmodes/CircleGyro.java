@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -49,6 +50,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class CircleGyro extends LinearOpMode {
 
+    DcMotor motorRight;
+    DcMotor motorLeft;
+
     DcMotor right;
     DcMotor left;
     double speed = 0.00;
@@ -59,6 +63,7 @@ public class CircleGyro extends LinearOpMode {
     double rightPower;
     int currentHeading = 0;
     double steeringAdjustment = 0;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -140,6 +145,10 @@ public class CircleGyro extends LinearOpMode {
                 Thread.sleep(50);
             }
             //  }
+            telemetry.addData("1. h", String.format("%03d", currentHeading));
+
+            Thread.sleep(10);
+
 
 
 
@@ -159,10 +168,36 @@ public class CircleGyro extends LinearOpMode {
 
             // if the A and B buttons are pressed, reset Z heading.
 
-            telemetry.addData("1. h", String.format("%03d", currentHeading));
 
-            Thread.sleep(10);
 
         }
-    }
+
+
+            }
+
+    public class marshmellow extends OpMode {
+
+
+        public void init() {
+        }
+
+        DcMotor motorRight;
+        DcMotor motorLeft;
+
+
+
+        public void loop(){
+        double left = -gamepad1.right_stick_y;
+        double right = -gamepad1.left_stick_y;
+
+        motorLeft.setPower(left);
+        motorRight.setPower(right);
 }
+
+
+
+
+    }
+        }
+
+
