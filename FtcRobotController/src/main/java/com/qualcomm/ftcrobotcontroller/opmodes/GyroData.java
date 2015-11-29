@@ -51,9 +51,9 @@ public class GyroData extends LinearOpMode {
 
     DcMotor right;
     DcMotor left;
-    double speed = 0.08;
+    double speed = 1;
     double targetHeading = 0.0;
-    double gain = 0.007;
+    double gain = 0.1;
     double steeringError;
     double leftPower;
     double rightPower;
@@ -63,8 +63,8 @@ public class GyroData extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        right = hardwareMap.dcMotor.get("right");
-        left = hardwareMap.dcMotor.get("left");
+        right = hardwareMap.dcMotor.get("m1");
+        left = hardwareMap.dcMotor.get("m2");
         right.setDirection(DcMotor.Direction.REVERSE);
         GyroSensor sensorGyro;
 
@@ -119,8 +119,8 @@ public class GyroData extends LinearOpMode {
 
 
 
-            right.setPower(rightPower);
-            left.setPower(leftPower);
+            left.setPower(rightPower);
+            right.setPower(leftPower);
 
 
            /*     if (rightPower > 1.0 || rightPower < -1.0) {

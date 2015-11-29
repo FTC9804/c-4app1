@@ -8,21 +8,24 @@ import com.qualcomm.ftcrobotcontroller.opmodes.CircleGyro;
  */
 public class C4TankDrive extends OpMode {
 
-    DcMotor motorRight;
-    DcMotor motorLeft;
+    DcMotor right;
+    DcMotor left;
 
 
     @Override
     public void init(){
 
-        motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
-        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+        right = hardwareMap.dcMotor.get("m1");
+        left = hardwareMap.dcMotor.get("m2");
+        left.setDirection(DcMotor.Direction.REVERSE);
 
     }
 
     @Override
     public void loop(){
+    // write the values to the motors
+        right.setPower(-gamepad1.right_stick_y);
+        left.setPower(-gamepad1.left_stick_y);
 
 
 

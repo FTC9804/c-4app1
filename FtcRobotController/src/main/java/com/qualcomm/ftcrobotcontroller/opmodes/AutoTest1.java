@@ -1,26 +1,23 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.util.Range;
-
 
 /**
  * Created by etiennelunetta on 11/28/15.
  */
-public class AutoTest1 extends OpMode {
+public class AutoTest1 extends LinearOpMode {
 
     //editable distances referenced to by all Autonomous codes
 
-    public long timeA = 0;              //first distance for position 2
-    public double timeB = 0.0;              //first distance for position 1
-    public double timeC = 0.0;              //extra distance is going to far mountain
-    public double timeD = 0.0;              //final distance for al all autonomous to mountain
+    public double timeA = 5;              //first distance for position 2
+    public double timeB = 5;              //first distance for position 1
+    public double timeC = 5;              //extra distance is going to far mountain
+    public double timeD = 5;              //final distance for al all autonomous to mountain
 
-    public double speed = 0.08;             //speed during straight line driving
+    public double speed = 0.5;             //speed during straight line driving
     public double targetHeading = 0.0;      //constant gyro angle
-    public double gain = 0.007;             //gain for correcting error
+    public double gain = 0.01;             //gain for correcting error
 
     //Non editable variables
     private double steeringError;
@@ -28,54 +25,44 @@ public class AutoTest1 extends OpMode {
     private double rightPower;
     private int currentHeading = 0;
     private double steeringAdjustment = 0;
-    DcMotor rightMotor;
-    DcMotor leftMotor;
-    DcMotor upDown;
-    DcMotor climb1;
-    DcMotor climb2;
-    DcMotor rotation;
-    Servo claw;
-    Servo arm;
+    DcMotor right;
+    DcMotor left;
     GyroSensor sensorGyro;
 
-    //DcMotor upDown;
-    //Servo rotation;
-
-    @Override
-    public void init(){
-
-        declarations();
-
-    }
-
+    int i = 0;
     public void runOpMode() throws InterruptedException {
+
+        i++;
+
+        //set z to 0
+
+        while (i == 1) {
+            sensorGyro.resetZAxisIntegrator();
+        }
+
+        //init gyro
 
         gyroInit();
 
-    }
+        declarations();
 
-    @Override
-    public void loop(){
+        while (opModeIsActive()) {
 
-        autonomousLoop1();
+            autonomousLoop1();
 
-        straightLineFunctionality();
-
-        telemetry.addData("time", "elapsed time: " + Double.toString(this.time));
-        telemetry.addData("1. h", String.format("%03d", currentHeading));
+            telemetry.addData("1. h", String.format("%03d", currentHeading));
+        }
     }
 
 
       //+++++++++$$$$$$$$$$+++++++++//
      //_______//FUNCTIONS//________//
     //+++++++++$$$$$$$$$$+++++++++//
-    public void declarations(){
+    public void declarations() throws InterruptedException{
 
-            rightMotor = hardwareMap.dcMotor.get("m1");
-            leftMotor = hardwareMap.dcMotor.get("m2");
-            climb1 = hardwareMap.dcMotor.get("m4");
-            climb2 = hardwareMap.dcMotor.get("m5");
-            climb1 = climb2;
+            right = hardwareMap.dcMotor.get("m1");
+            left = hardwareMap.dcMotor.get("m2");
+
     }
 
     public void gyroInit() throws InterruptedException {
@@ -90,25 +77,31 @@ public class AutoTest1 extends OpMode {
         // calibrate the gyro.
         sensorGyro.calibrate();
 
+        // wait for the start button to be pressed.
+        waitForStart();
+
         // make sure the gyro is calibrated.
         while (sensorGyro.isCalibrating()) {
             Thread.sleep(50);
         }
     }
 
-    public void autonomousLoop1(){
+    public void autonomousLoop1() throws InterruptedException{
 
         if (this.time <= timeA) {
-
-        } else if (this.time > timeA && this.time <= timeB + timeA) {
             straightLineFunctionality();
+        } else if (this.time > timeA && this.time <= timeB + timeA) {
+            NegativeTurn135();
         } else if (this.time > timeB && this.time <= timeA + timeB + timeC) {
-            turn135();
+            straightLineFunctionality();
         } else if (this.time > timeC && this.time <= timeA + timeB + timeC + timeD) {
             straightLineFunctionality();
         }else {
             stop();
         }
+
+        telemetry.addData("time", "elapsed time: " + Double.toString(this.time));
+
         /**
         } else if (this.time > 20 && this.time <= 25) {
             NegativeTurn135();
@@ -119,15 +112,9 @@ public class AutoTest1 extends OpMode {
         } else {
             stop();
         } **/
-
-
-
-
-
-
     }
 
-    public void straightLineFunctionality(){
+    public void straightLineFunctionality() throws InterruptedException{
 
         currentHeading = sensorGyro.getHeading();
         if (currentHeading > 180){
@@ -156,18 +143,20 @@ public class AutoTest1 extends OpMode {
 
 
 
-        rightMotor.setPower(rightPower);
-        leftMotor.setPower(leftPower);
+        right.setPower(rightPower);
+        left.setPower(leftPower);
 
 
-            sensorGyro.resetZAxisIntegrator();
+        sensorGyro.resetZAxisIntegrator();
+
+        telemetry.addData("1. h", String.format("%03d", currentHeading));
 
     }
 
-    public void turningFunctionality(){
+    public void turningFunctionality() throws InterruptedException {
 
         currentHeading = sensorGyro.getHeading();
-        if (currentHeading > 180){
+        if (currentHeading > 180) {
             currentHeading -= 360;
         }
 
@@ -192,46 +181,41 @@ public class AutoTest1 extends OpMode {
         }
 
 
-
-        rightMotor.setPower(rightPower);
-        leftMotor.setPower(leftPower);
+        right.setPower(rightPower);
+        left.setPower(leftPower);
 
 
         sensorGyro.resetZAxisIntegrator();
 
+        telemetry.addData("1. h", String.format("%03d", currentHeading));
+
     }
 
-    public void turn45(){
+    /** public void turn45() throws InterruptedException{
         targetHeading = currentHeading + 45;
-        straightLineFunctionality();
+        turningFunctionality();
 
     }
-    public void turn90(){
+    public void turn90() throws InterruptedException{
         targetHeading = currentHeading + 90;
-        straightLineFunctionality();
+        turningFunctionality();
     }
-    public void turn135(){
+    public void turn135() throws InterruptedException{
         targetHeading = currentHeading + 135;
-        straightLineFunctionality();
+        turningFunctionality();
     }
-    public void NegativeTurn45(){
+    public void NegativeTurn45() throws InterruptedException{
         targetHeading = currentHeading - 45;
-        straightLineFunctionality();
+        turningFunctionality();
 
     }
-    public void NegativeTurn90(){
+    public void NegativeTurn90() throws InterruptedException{
         targetHeading = currentHeading - 90;
-        straightLineFunctionality();
-    }
-    public void NegativeTurn135(){
+        turningFunctionality();
+    } **/
+
+    public void NegativeTurn135() throws InterruptedException{
         targetHeading = currentHeading - 135;
-        straightLineFunctionality();
+        turningFunctionality();
     }
 }
-
-
-
-
-
-
-
