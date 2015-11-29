@@ -16,7 +16,7 @@ public class AutoTest1 extends LinearOpMode {
     public double timeD = 5;              //final distance for al all autonomous to mountain
 
     public double speed = 0.5;             //speed during straight line driving
-    public double targetHeading = 0.0;      //constant gyro angle
+    public double targetHeading = 0.0;     //constant gyro angle
     public double gain = 0.01;             //gain for correcting error
 
     //Non editable variables
@@ -28,29 +28,24 @@ public class AutoTest1 extends LinearOpMode {
     DcMotor right;
     DcMotor left;
     GyroSensor sensorGyro;
-
     int i = 0;
+
     public void runOpMode() throws InterruptedException {
 
         i++;
 
-        //set z to 0
-
-        while (i == 1) {
-            sensorGyro.resetZAxisIntegrator();
-        }
+        //set z to 0 once
+        while (i == 1) {sensorGyro.resetZAxisIntegrator();}
 
         //init gyro
-
         gyroInit();
-
         declarations();
 
         while (opModeIsActive()) {
 
             autonomousLoop1();
 
-            telemetry.addData("1. h", String.format("%03d", currentHeading));
+            //telemetry.addData("1. h", String.format("%03d", currentHeading));
         }
     }
 
@@ -58,7 +53,7 @@ public class AutoTest1 extends LinearOpMode {
       //+++++++++$$$$$$$$$$+++++++++//
      //_______//FUNCTIONS//________//
     //+++++++++$$$$$$$$$$+++++++++//
-    public void declarations() throws InterruptedException{
+    public void declarations(){
 
             right = hardwareMap.dcMotor.get("m1");
             left = hardwareMap.dcMotor.get("m2");
@@ -100,7 +95,7 @@ public class AutoTest1 extends LinearOpMode {
             stop();
         }
 
-        telemetry.addData("time", "elapsed time: " + Double.toString(this.time));
+        //telemetry.addData("time", "elapsed time: " + Double.toString(this.time));
 
         /**
         } else if (this.time > 20 && this.time <= 25) {
@@ -149,7 +144,7 @@ public class AutoTest1 extends LinearOpMode {
 
         sensorGyro.resetZAxisIntegrator();
 
-        telemetry.addData("1. h", String.format("%03d", currentHeading));
+       // telemetry.addData("1. h", String.format("%03d", currentHeading));
 
     }
 
